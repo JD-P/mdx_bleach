@@ -58,8 +58,12 @@ class BleachExtension(Extension):
         super(BleachExtension, self).__init__(**kwargs)
 
     def extendMarkdown(self, md, md_globals):
-        if md.safeMode:
-            raise ImproperlyConfigured("Markdown's safe mode is not supported.")
+        try:
+            if md.safeMode:
+                raise ImproperlyConfigured("Markdown's safe mode is not supported.")
+        except AttributeError:
+            # Newest version of md doesn't seem to have safe mode
+            pass
 
         tags = self.getConfig('tags', ALLOWED_TAGS)
         attributes = self.getConfig('attributes', ALLOWED_ATTRIBUTES)
